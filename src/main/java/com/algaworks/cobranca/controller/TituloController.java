@@ -23,12 +23,12 @@ import com.algaworks.cobranca.service.CadastroTituloService;
 @Controller
 @RequestMapping("/titulos")
 public class TituloController {
-	
+
 	private static final String CADASTRO_VIEW = "CadastroTitulo";
 
 	@Autowired
 	private Titulos titulos;
-	
+
 	@Autowired
 	private CadastroTituloService cadastroTituloService;
 
@@ -41,10 +41,10 @@ public class TituloController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public String salvar(@Validated Titulo titulo, Errors errors, RedirectAttributes attributes) {
-		if(errors.hasErrors()) {
+		if (errors.hasErrors()) {
 			return CADASTRO_VIEW;
 		}
-		
+
 		try {
 			cadastroTituloService.salvar(titulo);
 			attributes.addFlashAttribute("mensagem", "Título salvo com sucesso!");
@@ -63,23 +63,27 @@ public class TituloController {
 
 		return mv;
 	}
-	
-	@RequestMapping(value="{codigo}", method = RequestMethod.GET)
+
+	@RequestMapping(value = "{codigo}", method = RequestMethod.GET)
 	public ModelAndView edicao(@PathVariable("codigo") Titulo titulo) {
 		ModelAndView mv = new ModelAndView(CADASTRO_VIEW);
 		mv.addObject(titulo);
 		return mv;
-	} 
+	}
+	
+	public void receber(Long codigo) {
+		
+	}
 
 	@ModelAttribute("todosStatustitulo")
 	public List<StatusTitulo> todosStatusTitulo() {
 		return Arrays.asList(StatusTitulo.values());
 	}
-	
-	@RequestMapping(value="{codigo}", method = RequestMethod.POST)
+
+	@RequestMapping(value = "{codigo}", method = RequestMethod.POST)
 	public String excluir(@PathVariable Long codigo, RedirectAttributes attributes) {
 		cadastroTituloService.excluir(codigo);
-				
+
 		attributes.addFlashAttribute("mensagem", "Titulo excluído com sucesso!");
 		return "redirect:/titulos";
 	}

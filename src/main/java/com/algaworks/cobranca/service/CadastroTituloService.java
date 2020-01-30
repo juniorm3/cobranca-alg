@@ -1,5 +1,6 @@
 package com.algaworks.cobranca.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.algaworks.cobranca.Titulos;
 import com.algaworks.cobranca.model.StatusTitulo;
 import com.algaworks.cobranca.model.Titulo;
+import com.algaworks.cobranca.repository.filter.TituloFilter;
 
 @Service
 public class CadastroTituloService {
@@ -35,5 +37,16 @@ public class CadastroTituloService {
 		titulos.save(titulo.get());
 		
 		return StatusTitulo.RECEBIDO.getDescricao();
+	}
+	
+	public List<Titulo> filtrar(TituloFilter filtro){
+		if(filtro.getDescricao() == null) {
+			return titulos.findAll();
+		} else {
+			return titulos.findByDescricaoContaining(filtro.getDescricao());			
+		}
+		
+//		String descricao = filtro.getDescricao() == null ? "%" : filtro.getDescricao();
+		
 	}
 }
